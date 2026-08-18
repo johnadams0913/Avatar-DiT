@@ -17,7 +17,7 @@ Avatar_DiT/
 │   ├── training/          # stage configs: flame.yaml (stage 1), multiview.yaml (stage 2),
 │   │                      #   multiview-lora.yaml (stage 3, rank-64 LoRA), base.yaml
 │   └── inference/         # inference configs: face-control.yaml, multiview.yaml, wan-control.yaml
-├── wan/                   # model code
+├── model/                 # model code
 │   ├── modules/           # DiT backbone (model.py), FLAME adapter (face_blocks.py),
 │   │   │                  #   motion encoder, VAE, CLIP/T5 embedders
 │   │   └── embedder/
@@ -28,12 +28,13 @@ Avatar_DiT/
 │   └── util.py
 ├── data/                  # dataloaders (videoloader.py: VideoLoader / MultiViewLoader)
 │   └── scripts/           # mask / depth / caption / bbox preprocessing helpers
-├── data_pipeline/         # annotation & alignment pipeline (see its own README):
-│                          #   video download / tracking / splitting / SyncNet filtering,
-│                          #   EMICA-based FLAME fitting, FLAME mesh rendering
+├── dataset/
+│   ├── data_pipeline/     # annotation & alignment pipeline (see its own README):
+│   │                      #   video download / tracking / splitting / SyncNet filtering,
+│   │                      #   EMICA-based FLAME fitting, FLAME mesh rendering
+│   └── splits/            # dataset split lists used in the paper (relative paths)
 ├── scripts/               # body-mesh (MHR/SMPL) rendering from calibrated cameras,
 │                          #   training-dataset assembly
-├── splits/                # dataset split lists used in the paper (relative paths)
 ├── libs/                  # checkpoint conversion utilities (DeepSpeed zero_to_fp32 etc.)
 └── backend/               # video/image io utilities
 ```
@@ -45,7 +46,7 @@ conda env create -f environment.yml   # python 3.12, torch + accelerate + diffus
 conda activate hf
 ```
 
-Flash-Attention 2 is recommended. The annotation pipeline has its own requirements (`data_pipeline/requirements.txt`, incl. pytorch3d).
+Flash-Attention 2 is recommended. The annotation pipeline has its own requirements (`dataset/data_pipeline/requirements.txt`, incl. pytorch3d).
 
 ## Pretrained backbones (not redistributed here)
 
@@ -54,17 +55,17 @@ Download and place under `pretrained_models/wan2.2/`:
 - Wan2.2-Animate-14B (`Wan-AI/Wan2.2-Animate-14B` on Hugging Face; transformer weights are loaded via `transformer_config.ckpt_path`)
 - `Wan2.1_VAE.pth`, `models_clip_open-clip-xlm-roberta-large-vit-huge-14.pth`, `models_t5_umt5-xxl-enc-bf16.pth` (from the Wan2.2 release)
 
-The FLAME 2020 model (`data_pipeline/flame_model/flame_2020.pt`) must be obtained from https://flame.is.tue.mpg.de under its license and is not redistributed.
+The FLAME 2020 model (`dataset/data_pipeline/flame_model/flame_2020.pt`) must be obtained from https://flame.is.tue.mpg.de under its license and is not redistributed.
 
 ## Data preparation
 
 1. **Face-control data (stage 1)**: talking videos with per-frame FLAME labels.
-   Use `data_pipeline/` — download/track/split (`run_tracksplit.py`), SyncNet filtering (`run_syncnet.py`), EMICA FLAME fitting (`run_trackflame*.py`), and FLAME mesh rendering (`render_flame_mesh.py`).
+   Use `dataset/data_pipeline/` — download/track/split (`run_tracksplit.py`), SyncNet filtering (`run_syncnet.py`), EMICA FLAME fitting (`run_trackflame*.py`), and FLAME mesh rendering (`render_flame_mesh.py`).
 2. **Multi-view data (stage 2)**: calibrated multi-camera datasets (DNA-Rendering, MVHumanNet, ZJU-MoCap).
    Render per-view body meshes with `scripts/render_smpl_from_cam.py` / `scripts/render_smpl_batch.py` and assemble the training layout with `scripts/build_training_dataset.py`.
 3. **Joint data (stage 3)**: hybrid mixture of the multi-view set and monocular FLAME-labeled talking clips.
 
-The exact split lists used in the paper are in `splits/`:
+The exact split lists used in the paper are in `dataset/splits/`:
 
 | file | clips | usage |
 |---|---|---|

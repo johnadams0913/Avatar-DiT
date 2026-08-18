@@ -4,7 +4,7 @@ from tqdm import tqdm
 from typing import Optional, Tuple
 from diffusers import FlowMatchEulerDiscreteScheduler
 
-from wan.util import exists, append_dims
+from model.util import exists, append_dims
 from ..scheduler import FlowUniPCMultistepScheduler, FlowMatchScheduler
 from .base_model import BaseModel
 

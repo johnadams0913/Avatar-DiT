@@ -13,7 +13,7 @@ from tqdm import tqdm
 
 from backend.functool import save_video
 from ckpt_util import load_config
-from wan.util import instantiate_from_config, default
+from model.util import instantiate_from_config, default
 from data.utils import normalize, to_tensor
 from data.videoloader import (
     read_video_frames,

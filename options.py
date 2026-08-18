@@ -4,7 +4,7 @@ import shutil
 import json
 
 from datetime import datetime
-from wan.util import rank_zero_print
+from model.util import rank_zero_print
 
 def list_of_bools(value):
     try:

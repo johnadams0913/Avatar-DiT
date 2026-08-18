@@ -10,7 +10,7 @@ import PIL.Image as Image
 
 from glob import glob
 from tqdm import tqdm
-from wan.util import default
+from model.util import default
 from accelerate import Accelerator
 from safetensors.torch import save_file as save_safetensors
 

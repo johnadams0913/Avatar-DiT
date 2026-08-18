@@ -7,7 +7,7 @@ from peft import LoraConfig, set_peft_model_state_dict
 from peft.tuners.lora.layer import Linear as LoRALinearLayer
 
 from ckpt_util import load_weights, delete_states, fitting_weights
-from wan.util import instantiate_from_config, exists, rank_zero_print
+from model.util import instantiate_from_config, exists, rank_zero_print
 
 
 def initialize_module(framework, model_name, config, last_time=None):

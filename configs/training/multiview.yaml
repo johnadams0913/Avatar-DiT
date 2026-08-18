@@ -1,6 +1,6 @@
 model:
   base_learning_rate: 1.0e-6
-  target: wan.wrapper.trainer.mv_trainer.MultiViewTrainer
+  target: model.wrapper.trainer.mv_trainer.MultiViewTrainer
   params:
     gt_key: image
     image_key: reference
@@ -21,7 +21,7 @@ model:
       shift: 5.0
 
     flame_adapter_config:
-      target: wan.modules.face_blocks.FlameAdapter
+      target: model.modules.face_blocks.FlameAdapter
       params:
         hidden_dim: 512
         flame_dim: 112
@@ -36,17 +36,17 @@ model:
         camera_dim: 6
 
     vae_config:
-      target: wan.modules.vae.WanVAE
+      target: model.modules.vae.WanVAE
       params:
         vae_pth: pretrained_models/wan2.2/Wan2.1_VAE.pth
 
     img_embedder_config:
-      target: wan.modules.embedder.clip.CLIPModel
+      target: model.modules.embedder.clip.CLIPModel
       params:
         checkpoint_path: pretrained_models/wan2.2/models_clip_open-clip-xlm-roberta-large-vit-huge-14.pth
 
     txt_embedder_config:
-      target: wan.modules.embedder.t5.T5EncoderModel
+      target: model.modules.embedder.t5.T5EncoderModel
       params:
         checkpoint_path: pretrained_models/wan2.2/models_t5_umt5-xxl-enc-bf16.pth
         tokenizer_path: google/umt5-xxl

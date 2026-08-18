@@ -6,7 +6,7 @@ from tqdm import tqdm
 from options import Options
 from ckpt_util import load_config
 from data.videoloader import create_dataloader
-from wan.util import instantiate_from_config, default, rank_zero_print
+from model.util import instantiate_from_config, default, rank_zero_print
 
 import torch
 from accelerate import Accelerator

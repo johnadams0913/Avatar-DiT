@@ -3,7 +3,7 @@ import torch.nn as nn
 
 from typing import Tuple
 from einops import rearrange
-from wan.util import checkpoint_wrapper, zero_module
+from model.util import checkpoint_wrapper, zero_module
 from .layer import MemoryEfficientAttention, sequential_downsample_3d, rope_params
 
 

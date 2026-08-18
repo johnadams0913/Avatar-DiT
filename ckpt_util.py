@@ -8,7 +8,7 @@ from tqdm import tqdm
 from omegaconf import OmegaConf
 from safetensors.torch import save_file
 from libs.convert_ckpt import convert_sd_ckpt
-from wan.util import rank_zero_print
+from model.util import rank_zero_print
 
 VALID_FORMATS = [".pt", ".pth", ".ckpt", ".safetensors", ".bin"]
 
@@ -210,7 +210,7 @@ def convert_ckpt(checkpoint, new_checkpoint):
     save_file(convert_sd_ckpt(sd), new_checkpoint)
 
 def transfer_to_hf(config, ckpt_path, save_path):
-    from wan.util import instantiate_from_config
+    from model.util import instantiate_from_config
     model = instantiate_from_config(load_config(config).model)
     model.init_from_ckpt(ckpt_path)
     model.hf_save_model(save_path)
