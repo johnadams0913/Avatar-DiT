@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+checkpoints/
+pretrained_models/
+models/
+wandb/
+output/
+datasets/
+video_outputs/
+*.safetensors
+*.pt
+*.pth
+*.ckpt

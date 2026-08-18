@@ -1,0 +1,38 @@
+name: hf
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - pip=24.2
+  - python=3.12.5
+  - pip:
+      - accelerate==1.6.0
+      - diffusers==0.31.0
+      - einops==0.8.0
+      - gradio==5.1.0
+      - gradio-client==1.4.0
+      - huggingface-hub==0.25.2
+      - imageio==2.34.2
+      - matplotlib==3.9.0
+      - numpy==1.26.4
+      - omegaconf==2.3.0
+      - open-clip-torch==2.24.0
+      - opencv-python==4.10.0.84
+      - pillow==10.3.0
+      - safetensors==0.4.3
+      - scikit-image==0.24.0
+      - scipy==1.14.0
+      - tensorboard==2.16.2
+      - timm==1.0.7
+      - tokenizers==0.19.1
+      - torch==2.6.0
+      - torchvision==0.21.0
+      - torchdiffeq==0.2.4
+      - torchmetrics==1.4.0.post0
+      - torchsde==0.2.6
+      - tqdm==4.66.4
+      - transformers==4.42.0
+      - xformers==0.0.29.post3
+      - deepspeed==0.16.5

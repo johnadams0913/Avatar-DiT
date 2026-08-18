@@ -1,0 +1,45 @@
+model:
+  base_learning_rate: 1.0e-6
+  target: wan.wrapper.wan.WanInferenceWrapper
+  params:
+    hf_load: true
+    max_reft_len: 13
+    scheduler_config:
+      scheduler_type: unipc
+      num_train_timesteps: 1000
+      shift: 5.0
+
+    flame_adapter_config:
+      target: wan.modules.face_blocks.FlameAdapter
+      params:
+        hidden_dim: 512
+        flame_dim: 112
+        ffn_dim: 1024
+        out_dim: 512
+        num_adapter_layers: 4
+
+    transformer_config:
+      ckpt_path: Wan-AI/Wan2.2-Animate-14B
+      params:
+        flame_dim: 112
+      #ckpt_path: models/chen-hires
+
+    vae_config:
+      target: wan.modules.vae.WanVAE
+      params:
+        vae_pth: pretrained_models/wan2.2/Wan2.1_VAE.pth
+#        device: cpu
+
+    img_embedder_config:
+      target: wan.modules.embedder.clip.CLIPModel
+      params:
+#        device: cpu
+        checkpoint_path: pretrained_models/wan2.2/models_clip_open-clip-xlm-roberta-large-vit-huge-14.pth
+
+    txt_embedder_config:
+      target: wan.modules.embedder.t5.T5EncoderModel
+      params:
+#        device: cpu
+        checkpoint_path: pretrained_models/wan2.2/models_t5_umt5-xxl-enc-bf16.pth
+        tokenizer_path: google/umt5-xxl
+        text_len: 512

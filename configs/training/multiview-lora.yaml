@@ -1,0 +1,97 @@
+model:
+  base_learning_rate: 1.0e-6
+  target: wan.wrapper.trainer.mv_trainer.MultiViewTrainer
+  params:
+    gt_key: image
+    image_key: reference
+    control_key: pose
+    face_key: face
+    text_key: text
+    mcode_key: motion_code
+    camera_key: camera
+    ucg_text_rate: 0.1
+    ucg_img_rate: 0.1
+    ucg_control_rate: 0.
+    ucg_face_rate: 0.1
+    lora_training: true
+    hf_load: true
+    max_reft_len: 13
+    scheduler_config:
+      scheduler_type: flow
+      num_train_timesteps: 1000
+      shift: 5.0
+
+    flame_adapter_config:
+      target: wan.modules.face_blocks.FlameAdapter
+      params:
+        hidden_dim: 512
+        flame_dim: 112
+        ffn_dim: 1024
+        out_dim: 512
+        num_adapter_layers: 4
+
+    transformer_config:
+      ckpt_path: Wan-AI/Wan2.2-Animate-14B
+      params:
+        flame_dim: 112
+        camera_dim: 6
+
+    lora_config:
+      peft_params:
+        r: 64
+        lora_alpha: 64
+        lora_bias: false
+        lora_dropout: 0.0
+        bias: none
+        init_lora_weights: "gaussian"
+        target_modules:
+          - ffn.0
+          - k
+          - q
+          - v
+          - ffn.2
+          - v_img
+          - o
+          - k_img
+        exclude_modules:
+          - flame_adapter
+          - face_encoder
+          - face_adapter
+          - motion_encoder
+          - time_projection
+          - img_emb
+          - camera_embedding
+
+    vae_config:
+      target: wan.modules.vae.WanVAE
+      params:
+        vae_pth: pretrained_models/wan2.2/Wan2.1_VAE.pth
+
+    img_embedder_config:
+      target: wan.modules.embedder.clip.CLIPModel
+      params:
+        checkpoint_path: pretrained_models/wan2.2/models_clip_open-clip-xlm-roberta-large-vit-huge-14.pth
+
+    txt_embedder_config:
+      target: wan.modules.embedder.t5.T5EncoderModel
+      params:
+        checkpoint_path: pretrained_models/wan2.2/models_t5_umt5-xxl-enc-bf16.pth
+        tokenizer_path: google/umt5-xxl
+        text_len: 128
+
+dataloader:
+  class: MultiViewLoader
+  params:
+    json_key: camera-hybrid
+    anchor_key: video
+    pose_key: mesh
+    candidate_sizes: [[512, 768], [768, 512], [640, 640]]
+    frame_length: 81
+    max_reference_num: 5
+  shuffle: true
+
+logger:
+  log_on_batch_idx: false
+  log_first_step: false
+  log_gif: true
+  log_img_step: 500
