@@ -97,31 +97,15 @@ Each script wraps `accelerate launch train.py -cfg configs/training/<stage>.yaml
 `inference.py` runs batch multi-view novel-view synthesis on a prepared validation set: for each sequence it takes one reference view, the per-view driving mesh renderings, and the calibrated camera parameters, and synthesizes the held-out target views.
 
 ```bash
-# expected layout under $DATASET_ROOT: <preset>/{video,mesh,camera,reference}/...
-# model config: configs/inference/multiview.yaml; checkpoint path: PRETRAINED_CKPT_PATH in inference.py
-
-DATASET_ROOT=./datasets python inference.py --dataset dna          # DNA-Rendering validation split
+python inference.py --dataset dna          # DNA-Rendering validation split
 
 # shard across GPUs/processes
-DATASET_ROOT=./datasets python inference.py --dataset dna --num-chunks 8 --chunk-id 0
+python inference.py --dataset dna --num-chunks 8 --chunk-id 0
 ```
+
+Set the dataset root via the `DATASET_ROOT` environment variable (default `./datasets`); the expected layout is `<preset>/{video,mesh,camera,reference}/...`. The model config is `configs/inference/multiview.yaml`, and the checkpoint path is set by `PRETRAINED_CKPT_PATH` in `inference.py`.
 
 Supported presets: `dna` (per-video camera json), `bili` (per-video camera npz), `mocap` (per-subject camera json). For face-control generation driven by FLAME parameters, use `configs/inference/face-control.yaml` with the same entry.
-
-## Checkpoints
-
-Trained checkpoints will be released in a future update.
-
-## Citation
-
-```bibtex
-@inproceedings{tu2026avatardit,
-  title   = {Avatar-DiT: Parametric Multi-View Human Rendering for Interactive Humans using Multi-modal DiT},
-  author  = {Tu, Fangyuan and Yan, Dingkun and Peng, Yichen and Tan, Shuai and Zhou, You and Zheng, Bo and Li, Zhengqing and Xie, Haoran and Wu, Erwin},
-  booktitle = {Pacific Graphics},
-  year    = {2026}
-}
-```
 
 ## Acknowledgements
 
