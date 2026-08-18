@@ -48,7 +48,7 @@ conda activate hf
 
 Flash-Attention 2 is recommended. The annotation pipeline has its own requirements (`dataset/data_pipeline/requirements.txt`, incl. pytorch3d).
 
-## Pretrained backbones (not redistributed here)
+## Pretrained backbones
 
 Download and place under `pretrained_models/wan2.2/`:
 
@@ -67,16 +67,7 @@ The FLAME 2020 model (`dataset/data_pipeline/flame_model/flame_2020.pt`) must be
 
 The exact split lists used in the paper are in `dataset/splits/`:
 
-| file | clips | usage |
-|---|---|---|
-| `flame.json` | 899 source segments (≈2,099 81-frame clips) | stage 1 training |
-| `flame_val.json` | 59 | face-control validation / five-way ablation |
-| `camera-hybrid.json` | 12,761 | stage 3 (joint) training |
-| `camera-hybrid_val.json` | 115 | multi-view validation |
-
-Paths inside the split files are relative to your dataset root (`-d` argument).
-
-## Training (three-stage curriculum)
+## Training
 
 All stages: AdamW, bf16, batch size 1/GPU, 81-frame clips; six epochs (one at 512×768, five at 720×1280).
 
