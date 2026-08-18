@@ -94,11 +94,19 @@ Each script wraps `accelerate launch train.py -cfg configs/training/<stage>.yaml
 
 ## Inference
 
+`inference.py` runs batch multi-view novel-view synthesis on a prepared validation set: for each sequence it takes one reference view, the per-view driving mesh renderings, and the calibrated camera parameters, and synthesizes the held-out target views.
+
 ```bash
-python inference.py --help
+# expected layout under $DATASET_ROOT: <preset>/{video,mesh,camera,reference}/...
+# model config: configs/inference/multiview.yaml; checkpoint path: PRETRAINED_CKPT_PATH in inference.py
+
+DATASET_ROOT=./datasets python inference.py --dataset dna          # DNA-Rendering validation split
+
+# shard across GPUs/processes
+DATASET_ROOT=./datasets python inference.py --dataset dna --num-chunks 8 --chunk-id 0
 ```
 
-`inference.py` runs multi-view novel-view synthesis / face-control generation given a reference image, driving mesh renderings (and/or FLAME parameters), and camera parameters. See `configs/inference/`.
+Supported presets: `dna` (per-video camera json), `bili` (per-video camera npz), `mocap` (per-subject camera json). For face-control generation driven by FLAME parameters, use `configs/inference/face-control.yaml` with the same entry.
 
 ## Checkpoints
 
